@@ -1,3 +1,4 @@
+
 C### ASAN output
 
 ```
@@ -34,8 +35,11 @@ a null pointer reference happens in sqlite/shell.c:3766:
 
 ``` C
 static char **tableColumnList(ShellState *p, const char *zTab){
+  // 1
+  //
   //azCol initialized here. 
   char **azCol = 0;      
+  
   sqlite3_stmt *pStmt;
   char *zSql;
   int nCol = 0;
@@ -48,8 +52,12 @@ static char **tableColumnList(ShellState *p, const char *zTab){
   rc = sqlite3_prepare_v2(p->db, zSql, -1, &pStmt, 0);
   sqlite3_free(zSql);
   if( rc ) return 0;
+  
+  // 2
+  //
   // while loop could be not executed
   while( sqlite3_step(pStmt)==SQLITE_ROW ){
+  
     if( nCol>=nAlloc-2 ){
       nAlloc = nAlloc*2 + nCol + 10;
       azCol = sqlite3_realloc(azCol, nAlloc*sizeof(azCol[0]));
@@ -63,7 +71,6 @@ static char **tableColumnList(ShellState *p, const char *zTab){
       nPK++;
       if( nPK==1
        && sqlite3_stricmp((const char*)sqlite3_column_text(pStmt,2),
-
                           "INTEGER")==0
       ){
         isIPK = 1;
@@ -74,6 +81,9 @@ static char **tableColumnList(ShellState *p, const char *zTab){
   }
 
   sqlite3_finalize(pStmt);
+  
+  // 3
+  //
   // Referencing azCol result in null pointer reference because azCol could still be zero.
   azCol[0] = 0;
   azCol[nCol+1] = 0;
