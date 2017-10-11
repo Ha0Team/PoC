@@ -36,7 +36,7 @@ A null pointer reference happens in sqlite/shell.c:3766. Though Windows and Linu
 
 ### root cause
 
-The bug dues to the ignorance of poteitial cases when `sqlite3_step(pStmt)==SQLITE_ROW` is false. And through PoC.db, the value is 0x65.
+The bug dues to the ignorance of potential cases when `sqlite3_step(pStmt)==SQLITE_ROW` is false. And through PoC.db the value is 0x65.
 
 ``` C
 static char **tableColumnList(ShellState *p, const char *zTab){
