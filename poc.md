@@ -1,5 +1,4 @@
-
-C### ASAN output
+### ASAN output
 
 ```
 BEGIN TRANSACTION;
@@ -29,9 +28,13 @@ SUMMARY: AddressSanitizer: SEGV /home/user/Desktop/fuzz/sqlite/ta/src/shell.c:38
 ==11908==ABORTING
 ```
 
+### bug introduction
+
+A null pointer reference happens in sqlite/shell.c:3766. Though Windows and Linux prevent the potential risks of null pointer reference, still might be exploitable in macOS.
+
 ### root cause
 
-a null pointer reference happens in sqlite/shell.c:3766:
+The bug dues to the ignorance of poteitial cases when `sqlite3_step(pStmt)==SQLITE_ROW` is false. And through PoC.db, the value is 0x65.
 
 ``` C
 static char **tableColumnList(ShellState *p, const char *zTab){
