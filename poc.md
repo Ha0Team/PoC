@@ -1,5 +1,7 @@
 ### ASAN output
 
+$ sqlite3 PoC.db ".dump"
+
 ```
 BEGIN TRANSACTION;
 /****** CORRUPTION ERROR *******/
