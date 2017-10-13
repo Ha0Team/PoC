@@ -1,3 +1,7 @@
+## CVE-2017-15286
+
+credit by SmallC@HaoTeam
+
 ### ASAN output
 
 $ sqlite3 PoC.db ".dump"
